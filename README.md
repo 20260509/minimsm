@@ -12,3 +12,7 @@ Build inside each version directory:
     build-SMP.bat  -> smp.exe     (GUI player)
 
 See the README.md inside each version directory for the full format spec and usage.
+
+---
+
+MSM is developed by **SimpleToolsStudio** (GitHub: [@20260509](https://github.com/20260509)).
