@@ -1,92 +1,94 @@
 # MSM v2.0
 
-MSM（Mini Sample/Media）是一个轻量级的音频采样媒体容器格式，
-使用 **Opus** 编解码器，支持灵活的压缩比和出色的音质。
+MSM (Mini Sample/Media) is a lightweight audio sample container format
+using the **Opus** codec, offering a flexible compression ratio and excellent quality.
 
-- 文件头小（30 字节）
-- 压缩比灵活（约 5:1 ~ 22:1，由比特率控制）
-- 音质出色（128 kbps 以上接近透明，Opus 是业界公认的高质量有损编解码器）
-- 采样率 48000 Hz
-- 支持 1 / 2 声道
-- 单头文件库（`minimsm.h`），可直接嵌入其他项目
-- **免费商用**（Opus 采用 BSD 3-Clause 许可证）
+- Small file header (30 bytes)
+- Flexible compression ratio (~5:1 – 22:1, bitrate-controlled)
+- Excellent quality (near-transparent at 128 kbps and above; Opus is widely recognized as a high-quality lossy codec)
+- Sample rate 48000 Hz
+- Supports 1 / 2 channels
+- Single-header library (`minimsm.h`), embeddable in other projects
+- **Free for commercial use** (Opus is BSD 3-Clause licensed)
 
 ---
 
-## 项目结构
+## Project structure
 
-| 工具 | 说明 |
+| Tool | Description |
 |---|---|
-| `msmcli.exe` | 命令行工具（MP3 → MSM / MSM → WAV / 播放 MSM） |
-| `smp.exe` | 图形化媒体播放器（MP3 / MP4 / WAV / MSM） |
+| `msmcli.exe` | CLI tool (MP3 → MSM / MSM → WAV / play MSM) |
+| `smp.exe` | GUI media player (MP3 / MP4 / WAV / MSM) |
 
-**说明：** `msmcli.exe` 是单文件可执行程序，只依赖 Windows 系统 DLL，无需安装。
+**Note:** `msmcli.exe` is a single-file executable that depends only on Windows system DLLs — no installation required.
 
 ---
 
-## 源代码文件结构
+## Source file layout
 
 ```
 SRC/
 ├── LICENSE
 ├── README.md
-├── minimp3.h            # MP3 解码器（CC0 1.0）
-├── minimsm.h            # MSM 编解码库（MIT）
-├── main.c               # 命令行工具源码（MIT）
-├── build-MSM.bat        # 编译脚本
+├── minimp3.h            # MP3 decoder (CC0 1.0)
+├── minimsm.h            # MSM codec library (MIT)
+├── main.c               # CLI tool source (MIT)
+├── build-MSM.bat        # Build script
 │
-├── opus.h               # libopus 公开头文件（BSD 3-Clause，随源码分发）
-├── opus_defines.h       # 同上
-├── opus_types.h         # 同上
-├── opus_multistream.h   # 同上
-├── opus_projection.h    # 同上
-└── opus_custom.h        # 同上
+├── opus.h               # libopus public headers (BSD 3-Clause, distributed with source)
+├── opus_defines.h       # same as above
+├── opus_types.h         # same as above
+├── opus_multistream.h   # same as above
+├── opus_projection.h    # same as above
+└── opus_custom.h        # same as above
 ```
 
-**说明：** `opus*.h` 是从 libopus 项目随源码分发的公开头文件，仅用于编译。
-链接时仍然需要 `libopus` 静态库（`libopus.a`）。
+**Note:** `opus*.h` are public headers distributed with the libopus project; they are only needed for compilation.
+Linking still requires the `libopus` static library (`libopus.a`).
 
 ---
 
-## 许可证
+## License
 
-**MIT License** —— 可自由使用、修改、分发、商用、闭源衍生，
-只需保留版权声明。详见 `LICENSE`。
+**MIT License** — free to use, modify, distribute, use commercially, and
+incorporate into closed-source derivatives, provided the copyright notice is
+retained. See `LICENSE`.
 
-**依赖：**
+**Dependencies:**
 
-- minimp3（CC0 1.0，公共领域）
-- libopus（BSD 3-Clause，可闭源商用，主要专利持有者已承诺免版税）
+- minimp3 (CC0 1.0, public domain)
+- libopus (BSD 3-Clause; closed-source commercial use permitted; major patent holders have pledged royalty-free terms)
 
-本仓库 `SRC/` 下随附 libopus 的公开头文件（`opus.h`、`opus_defines.h`、
-`opus_types.h`、`opus_multistream.h`、`opus_projection.h`、`opus_custom.h`），
-版权归 Xiph.Org Foundation、Skype Limited 等所有，采用 BSD 3-Clause 许可。
-这些头文件仅用于编译，链接时仍需要 libopus 静态库（`libopus.a`）。
+This repository's `SRC/` ships libopus public headers (`opus.h`, `opus_defines.h`,
+`opus_types.h`, `opus_multistream.h`, `opus_projection.h`, `opus_custom.h`),
+copyright Xiph.Org Foundation, Skype Limited, and others, under BSD 3-Clause.
+These headers are only used for compilation; linking still requires the libopus
+static library (`libopus.a`).
 
 ---
 
-## 编译
+## Building
 
-需要 MinGW-w64 或 MSYS2 + gcc，以及 `libopus` 静态库（`libopus.a`）。
+Requires MinGW-w64 or MSYS2 + gcc, plus the `libopus` static library (`libopus.a`).
 
-**头文件已随源码提供**（`SRC/opus*.h`），无需单独安装。
-MSYS2 下安装 libopus 静态库：
+**The headers are shipped with the source** (`SRC/opus*.h`) and need no separate installation.
+Install the libopus static library under MSYS2:
 
 ```bash
 pacman -S mingw-w64-x86_64-opus
 ```
 
-**注意：** 随源码分发的 `opus*.h` 与所链接的 `libopus.a` 应尽量保持同一版本。
+**Note:** the shipped `opus*.h` and the linked `libopus.a` should be from the same version if possible.
 
-**编译（在 `SRC/` 目录下执行）：**
+**Build (run inside `SRC/`):**
 
 ```cmd
 build-MSM.bat
 ```
 
-**编译产物：** `msmcli.exe`（单文件，约 1.5~2.5 MB）
+**Output:** `msmcli.exe` (single file, ~1.5 – 2.5 MB)
 
-**编译脚本 `build-MSM.bat` 内容：**
+**Contents of `build-MSM.bat`:**
 
 ```bat
 @echo off
@@ -97,130 +99,131 @@ gcc main.c -o msmcli.exe -lwinmm -lm -DMSM_USE_OPUS ^
 pause
 ```
 
-**说明：**
+**Notes:**
 
-- `cd /d %~dp0` 让脚本无论从哪里双击都能切到自身所在目录，保证 `opus*.h` 能被找到。
-- `-Wl,-Bstatic -lopus -Wl,-Bdynamic` 让 libopus 静态链接，
-  生成不依赖 `libopus-0.dll` 的单文件。
+- `cd /d %~dp0` lets the script switch to its own directory regardless of
+  where it is double-clicked, so `opus*.h` are found.
+- `-Wl,-Bstatic -lopus -Wl,-Bdynamic` links libopus statically,
+  producing a single file that does not depend on `libopus-0.dll`.
 
 ---
 
-## 系统要求
+## System requirements
 
-| 项目 | 要求 |
+| Item | Requirement |
 |---|---|
-| 操作系统 | Windows 7 SP1 及以上（32/64 位） |
-| 运行时依赖 | 无（单文件，只依赖 Windows 系统 DLL） |
-| 编译依赖 | gcc、MinGW-w64 或 MSYS2、libopus 静态库 |
+| OS | Windows 7 SP1 or later (32/64-bit) |
+| Runtime dependencies | None (single file, only Windows system DLLs) |
+| Build dependencies | gcc, MinGW-w64 or MSYS2, libopus static library |
 
-**说明：** 播放功能使用 Windows `waveOut` API，所有 Windows 版本都支持。
+**Note:** playback uses the Windows `waveOut` API, supported by all Windows versions.
 
 ---
 
-## 命令行工具用法
+## CLI usage
 
 ```cmd
-msmcli mp3  <input.mp3> <output.msm> <kbps>   :: MP3 转 MSM（Opus）
-msmcli wav  <input.msm> <output.wav>          :: MSM 转 WAV
-msmcli play <input.msm>                       :: 播放 MSM（仅 Windows）
+msmcli mp3  <input.mp3> <output.msm> <kbps>   :: MP3 to MSM (Opus)
+msmcli wav  <input.msm> <output.wav>          :: MSM to WAV
+msmcli play <input.msm>                       :: Play MSM (Windows only)
 ```
 
-### `kbps` 参数
+### The `kbps` parameter
 
-**必填。** 比特率控制压缩比和音质：
+**Required.** Bitrate controls compression ratio and quality:
 
-| kbps | 压缩比 | 音质 | 3 分钟文件大小 |
+| kbps | Compression | Quality | 3-minute file size |
 |---|---|---|---|
-| 64 | ~22:1 | 中等（语音良好，音乐可接受） | ~1.4 MB |
-| 96 | ~15:1 | 好 | ~2.1 MB |
-| **128** | **~11:1** | **很好（推荐）** | **~2.8 MB** |
-| 192 | ~7:1 | 极好 | ~4.2 MB |
-| 256 | ~5.5:1 | 接近透明 | ~5.6 MB |
+| 64 | ~22:1 | Fair (good for speech, acceptable for music) | ~1.4 MB |
+| 96 | ~15:1 | Good | ~2.1 MB |
+| **128** | **~11:1** | **Very good (recommended)** | **~2.8 MB** |
+| 192 | ~7:1 | Excellent | ~4.2 MB |
+| 256 | ~5.5:1 | Near-transparent | ~5.6 MB |
 
-### 使用示例
+### Examples
 
 ```cmd
-:: 128 kbps（推荐）
+:: 128 kbps (recommended)
 msmcli.exe mp3 E:\MUSIC\001.mp3 test.msm 128
 
-:: 64 kbps（小文件）
+:: 64 kbps (smaller file)
 msmcli.exe mp3 E:\MUSIC\001.mp3 small.msm 64
 
-:: 192 kbps（高音质）
+:: 192 kbps (high quality)
 msmcli.exe mp3 E:\MUSIC\001.mp3 hq.msm 192
 
-:: 转 WAV
+:: To WAV
 msmcli.exe wav test.msm test.wav
 
-:: 播放
+:: Play
 msmcli.exe play test.msm
 ```
 
-**44100 Hz 的 MP3 会自动重采样到 48000 Hz。**
+**44100 Hz MP3 input is automatically resampled to 48000 Hz.**
 
 ---
 
-## MSM 格式规范
+## MSM format specification
 
-以下是 `minimsm.h` 中定义的 MSM v2.0 格式核心信息，供实现者参考。
+The following is the core of the MSM v2.0 format as defined in `minimsm.h`, for implementers.
 
-### 文件头（30 字节）
+### File header (30 bytes)
 
-所有多字节字段均为**小端序**。结构体按 `#pragma pack(push, 1)` 紧密排列，
-无填充字节。字段合计 30 字节。
+All multi-byte fields are **little-endian**. The struct is packed tightly with
+`#pragma pack(push, 1)` and has no padding. Fields total 30 bytes.
 
-| 偏移 | 大小 | 字段 | 类型 | 说明 |
-|------|------|------|------|------|
-| 0 | 4 | `magic` | `char[4]` | `"MSM2"`（0x4D 0x53 0x4D 0x32） |
-| 4 | 2 | `version` | `uint16_t` | 格式版本，`0x0200` |
-| 6 | 2 | `flags` | `uint16_t` | 标志，值 `0x5A53`，小端存储为字节 `53 5A`（ASCII "SZ"） |
-| 8 | 2 | `channels` | `uint16_t` | 声道数（1 或 2） |
-| 10 | 4 | `sample_rate` | `uint32_t` | 采样率，固定 48000 |
-| 14 | 4 | `frame_count` | `uint32_t` | 帧总数 |
-| 18 | 4 | `pcm_samples` | `uint32_t` | 每声道总样本数，= `frame_count × 18432`（含末尾 padding） |
-| 22 | 4 | `data_offset` | `uint32_t` | 帧数据起始偏移（= 30） |
-| 26 | 4 | `reserved` | `uint16_t[2]` | 4 字节保留区，必须为 0 |
+| Offset | Size | Field | Type | Description |
+|--------|------|-------|------|-------------|
+| 0 | 4 | `magic` | `char[4]` | `"MSM2"` (0x4D 0x53 0x4D 0x32) |
+| 4 | 2 | `version` | `uint16_t` | Format version, `0x0200` |
+| 6 | 2 | `flags` | `uint16_t` | Flag, value `0x5A53`, stored little-endian as bytes `53 5A` (ASCII "SZ") |
+| 8 | 2 | `channels` | `uint16_t` | Channel count (1 or 2) |
+| 10 | 4 | `sample_rate` | `uint32_t` | Sample rate, fixed 48000 |
+| 14 | 4 | `frame_count` | `uint32_t` | Total frame count |
+| 18 | 4 | `pcm_samples` | `uint32_t` | Total samples per channel, = `frame_count × 18432` (including trailing padding) |
+| 22 | 4 | `data_offset` | `uint32_t` | Offset of frame data (= 30) |
+| 26 | 4 | `reserved` | `uint16_t[2]` | 4-byte reserved area, must be 0 |
 
-**加载校验规则：**
+**Load validation:**
 
-- 前 4 字节必须等于 `"MSM2"`，否则拒绝
-- `flags` 必须等于 `0x5A53`，否则拒绝
-- `version` 必须等于 `0x0200`，否则拒绝
-- `data_offset` 必须 ≤ 文件大小，否则拒绝
+- First 4 bytes must equal `"MSM2"`, otherwise reject
+- `flags` must equal `0x5A53`, otherwise reject
+- `version` must equal `0x0200`, otherwise reject
+- `data_offset` must be ≤ file size, otherwise reject
 
-### 帧布局
+### Frame layout
 
-`data_offset` 之后是 `frame_count` 个连续的帧块。
+After `data_offset` come `frame_count` consecutive frame blocks.
 
-**每个帧块：**
+**Each frame block:**
 
-| 偏移 | 大小 | 字段 | 说明 |
-|------|------|------|------|
-| 0 | 4 | `frame_samples` | 本帧每声道样本数，固定 18432 |
-| 4 | 4 | `comp_len` | 通道块压缩数据长度（含模式字节） |
-| 8 | `comp_len` | `ch_data` | 通道块压缩数据 |
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0 | 4 | `frame_samples` | Samples per channel in this frame, fixed 18432 |
+| 4 | 4 | `comp_len` | Compressed data length of the channel block (includes mode byte) |
+| 8 | `comp_len` | `ch_data` | Compressed data of the channel block |
 
-**标准帧大小：**
+**Standard frame size:**
 
 ```
 MSM_FRAME_SAMPLES = 18432
 ```
 
-**固定 18432**（不是 960 的整数倍，最后一帧用 0 padding）。
+**Fixed 18432** (not a multiple of 960; the last frame is zero-padded).
 
-> **重要：** `pcm_samples = frame_count × 18432`，**包含最后一帧的 padding 样本**。
-> 解码后 PCM 末尾可能有最多 18432 个静音样本，由应用自行裁剪或忽略。
-> 当前格式没有单独的有效样本数字段。
+> **Important:** `pcm_samples = frame_count × 18432`, **including the padding samples of the last frame**.
+> After decoding, the PCM tail may contain up to 18432 silent samples; the application
+> must trim or ignore them. The current format has no separate valid-sample-count field.
 
-### 通道块
+### Channel block
 
-每个通道块以**模式字节**开头：
+Each channel block begins with a **mode byte**:
 
-| 字节 0 | 说明 |
-|--------|------|
-| `0x20` | Opus 交织数据（立体声共用） |
+| Byte 0 | Description |
+|--------|-------------|
+| `0x20` | Opus interleaved data (shared for stereo) |
 
-字节 1 起是 Opus 数据：
+Byte 1 onward is Opus data:
 
 ```
 [2 bytes num_blocks]
@@ -229,121 +232,122 @@ MSM_FRAME_SAMPLES = 18432
 ...
 ```
 
-- `num_blocks = 20`（18432 / 960 向上取整）
-- 每块 960 样本（20ms at 48kHz）
+- `num_blocks = 20` (18432 / 960, rounded up)
+- Each block is 960 samples (20 ms at 48 kHz)
 
-### Opus 编码
+### Opus encoding
 
-- **采样率**：48000 Hz（Opus 原生支持）
-- **帧大小**：960 样本（20ms）
-- **应用模式**：`OPUS_APPLICATION_AUDIO`
-- **信号类型**：`OPUS_SIGNAL_MUSIC`
-- **复杂度**：10（最高）
+- **Sample rate:** 48000 Hz (natively supported by Opus)
+- **Frame size:** 960 samples (20 ms)
+- **Application mode:** `OPUS_APPLICATION_AUDIO`
+- **Signal type:** `OPUS_SIGNAL_MUSIC`
+- **Complexity:** 10 (maximum)
 
-### 重采样
+### Resampling
 
-输入 MP3 采样率不是 48000 Hz 时（如 44100 Hz），
-自动线性插值重采样到 48000 Hz。
+When the input MP3 sample rate is not 48000 Hz (e.g. 44100 Hz),
+it is automatically resampled to 48000 Hz using linear interpolation.
 
-### 数据率
+### Data rate
 
-| kbps | 立体声文件大小（3 分钟） |
+| kbps | Stereo file size (3 minutes) |
 |---|---|
 | 64 | ~1.4 MB |
 | 128 | ~2.8 MB |
 | 192 | ~4.2 MB |
 | 256 | ~5.6 MB |
 
-### 错误处理
+### Error handling
 
-按下表顺序依次判断：
+Evaluated in order, top to bottom:
 
-| 情况 | 处理 |
-|------|------|
-| magic 不是 `"MSM2"` | 拒绝文件 |
-| flags 不是 `0x5A53` | 拒绝文件 |
-| version 不是 `0x0200` | 拒绝文件 |
-| `data_offset` > 文件大小 | 拒绝文件 |
-| `frame_samples` > `MSM_FRAME_SAMPLES` | 截断到上限 |
-| `frame_samples == 0` | 跳过整个帧块（见下注） |
-| 压缩长度 == 0 | 拒绝（无效） |
-| 解压后样本数不匹配 | 拒绝（数据损坏） |
-| 输出缓冲溢出 | 停止解码，剩余填零 |
+| Condition | Handling |
+|-----------|----------|
+| magic not `"MSM2"` | Reject file |
+| flags not `0x5A53` | Reject file |
+| version not `0x0200` | Reject file |
+| `data_offset` > file size | Reject file |
+| `frame_samples` > `MSM_FRAME_SAMPLES` | Truncate to limit |
+| `frame_samples == 0` | Skip the entire frame block (see note below) |
+| compressed length == 0 | Reject (invalid) |
+| decompressed sample count mismatch | Reject (corrupt data) |
+| output buffer overflow | Stop decoding, zero-fill the rest |
 
-> **注：** 「跳过整个帧块」指跳过该帧的 `frame_samples`、`comp_len` 和
-> `ch_data` 三个部分，从下一个帧块边界继续解析。当前 `minimsm.h` 实现为
-> `continue`，仅跳过 `frame_samples` 字段；实现者解析时应注意此差异。
+> **Note:** "skip the entire frame block" means skipping the frame's `frame_samples`,
+> `comp_len`, and `ch_data` fields, and resuming parsing at the next frame block
+> boundary. The current `minimsm.h` implementation uses `continue`, which only
+> skips the `frame_samples` field; implementers should be aware of this difference.
 >
-> **编码侧补充：** `frame_samples` 固定 18432；非满帧调用 `msm_encode_frame`
-> 会返回 -5。编码器在最后一帧先 padding 到 18432 再写入。
+> **Encoder-side note:** `frame_samples` is fixed at 18432; calling `msm_encode_frame`
+> with a non-full frame returns -5. The encoder pads the last frame to 18432 before writing.
 
 ---
 
-## 使用示例
+## Usage example
 
 ```c
 #define MSM_USE_OPUS
 #include "opus.h"
 #include "minimsm.h"
 
-/* 打开 MSM 文件（Windows 宽字符路径） */
+/* Open an MSM file (Windows wide-character path) */
 msm_decoder_t dec;
 if (msm_open_w(&dec, L"audio.msm") != 0) {
-    /* 失败 */
+    /* failure */
 }
 
-/* 解码为 16-bit PCM */
+/* Decode to 16-bit PCM */
 int16_t *pcm = NULL;
 size_t samples = 0;
 if (msm_decode(&dec, &pcm, &samples) != 0) {
-    /* 失败 */
+    /* failure */
 }
 
-/* 使用 pcm ...（samples 是每声道样本数，含末尾 padding） */
+/* Use pcm ... (samples is the per-channel sample count, including trailing padding) */
 
 free(pcm);
 msm_close(&dec);
 ```
 
-**平台说明：**
+**Platform notes:**
 
-- `msm_open_w` 是 Windows 专用宽字符接口，仅在 `_WIN32` 下提供。
-- 非 Windows 平台使用 `msm_open`（窄字符，UTF-8 需自行转换）。
-- Windows 上若路径含非 ASCII 字符，请优先使用 `msm_open_w`。
-
----
-
-## 格式局限
-
-- 采样率固定 48000 Hz（Opus 的限制）
-- 帧内样本数固定 18432
-- 仅支持 1 / 2 声道（>2 在打开阶段被拒绝）
-- 无内建元数据（标题、艺术家等）
-- 无独立有效样本数字段，解码后末尾可能带 padding 静音
+- `msm_open_w` is a Windows-only wide-character interface, available only under `_WIN32`.
+- Non-Windows platforms use `msm_open` (narrow character; UTF-8 must be converted by the caller).
+- On Windows, prefer `msm_open_w` if paths contain non-ASCII characters.
 
 ---
 
-## 版本历史
+## Format limitations
+
+- Fixed 48000 Hz sample rate (an Opus constraint)
+- Fixed 18432 samples per frame
+- Supports only 1 / 2 channels (>2 is rejected at open time)
+- No built-in metadata (title, artist, etc.)
+- No separate valid-sample-count field; decoded output may contain trailing padding silence
+
+---
+
+## Version history
 
 ### v2.0 (2026)
-- 改用 Opus 编解码器
-- magic 改为 "MSM2"（0x4D 0x53 0x4D 0x32）
-- 压缩比 5:1 ~ 22:1（由比特率控制）
-- 音质显著提升（128 kbps 以上接近透明）
-- 支持 44100 Hz 输入（自动重采样）
-- 需要 libopus（BSD 3-Clause）
+- Switched to the Opus codec
+- Magic changed to "MSM2" (0x4D 0x53 0x4D 0x32)
+- Compression ratio 5:1 – 22:1 (bitrate-controlled)
+- Significantly improved quality (near-transparent at 128 kbps and above)
+- Supports 44100 Hz input (automatic resampling)
+- Requires libopus (BSD 3-Clause)
 
 ### v1.0 (2026)
-- 初始版本
-- 一阶 ADPCM，2-bit / 4-bit 双模式
-- 单头文件库，30 字节文件头
-- 压缩比固定 4:1 / 8:1
+- Initial release
+- First-order ADPCM, 2-bit / 4-bit dual mode
+- Single-header library, 30-byte file header
+- Fixed compression ratio 4:1 / 8:1
 
 ---
 
-## 联系方式
+## Contact
 
-如有问题或建议，请提交 issue 或联系 SimpleToolsStudio。
+For questions or suggestions, open an issue or contact SimpleToolsStudio.
 
 ---
 
